@@ -72,6 +72,9 @@
   </view>
   <view class="page__bd">
     <!-- 使用 topiclist，传入 requestData 数据 -->
+    <view class="panel">
+      <img src="images/yolink-bg.png" alt="">
+    </view>
     <topiclist :syncData.sync="requestData"></topiclist>
   </view>
 </view>

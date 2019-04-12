@@ -11,5 +11,7 @@
 	"appid": "wxd243b0261bf08c88",
 	"projectname": "yolink",
 	"miniprogramRoot": "dist/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {}
 }

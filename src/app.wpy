@@ -55,13 +55,13 @@ export default class extends wepy.app {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'LaraBBS',
+      navigationBarTitleText: '优联客',
       navigationBarTextStyle: 'black'
     },
     tabBar: {
       list: [{
         pagePath: 'pages/topics/index',
-        text: '首页',
+        text: '优联客',
         iconPath: 'images/index.png',
         selectedIconPath: 'images/index_selected.png'
       }, {
