@@ -8,8 +8,8 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"appid": "wx756787de07ac71b1",
-	"projectname": "larabbs-weapp",
+	"appid": "wxd243b0261bf08c88",
+	"projectname": "yolink",
 	"miniprogramRoot": "dist/",
 	"condition": {}
 }

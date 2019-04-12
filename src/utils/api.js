@@ -1,6 +1,6 @@
 import wepy from 'wepy'
 
-const host = __BASE_URL__
+const host = 'http://yolink.test/api'
 
 // 普通请求
 const request = async (options, showLoading = true) => {
