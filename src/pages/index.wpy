@@ -1,0 +1,87 @@
+<style lang="less">
+  /*分类*/
+  .weui-flex {
+    align-items: center;
+  }
+  .weui-cells {
+    margin-top: 0;
+    opacity: 0;
+    transition: .3s;
+    &:before, &:after {
+        display: none;
+    }
+    &_show {
+        opacity: 1;
+    }
+  }
+  .weui-cell {
+    &:before {
+        right: 15px;
+    }
+  }
+  .category-list__item {
+    margin: 10px 0;
+    background-color: #FFFFFF;
+    border-radius: 2px;
+    overflow: hidden;
+    &:first-child {
+        margin-top: 0;
+    }
+  }
+  .category-list__item_selected {
+    background-color: #eeeeee;
+  }
+  .category-list__img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .category-list__item-hd {
+    padding: 20px;
+    transition: opacity .3s;
+    &_show {
+        opacity: .4;
+    }
+  }
+  .category-list__item-bd {
+    height: 0;
+    overflow: hidden;
+    &_show {
+        height: auto;
+    }
+  }
+  page{
+    background-color: #FFFFFF;
+  }
+  image{
+    margin: 4px 0;
+  }
+</style>
+<template>
+  <view class="page">
+    <view class="weui-article__p">
+        <image class="weui-article__img" src="../images/yolink-bg.png" mode="aspectFit" style="height: 180px" />
+    </view>
+    <view class="page__bd">
+        <view class="weui-grids">
+            <block wx:for="{{grids}}" wx:for-item="category" wx:key="*this">
+                <navigator url="" class="weui-grid" hover-class="weui-grid_active">
+                    <image class="weui-grid__icon" src="../images/icon_tabbar.png" />
+                    <view class="weui-grid__label">{{ category }}</view>
+                </navigator>
+            </block>
+        </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    data = {
+      grids: [
+        '政府合作', '合规合法', '安全保障', '系统高效', '实力雄厚', '成本最优', '方案严谨', '专业团队', '全程服务'
+      ]
+    }
+  }
+</script>
