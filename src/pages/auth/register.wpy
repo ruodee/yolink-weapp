@@ -68,6 +68,9 @@
               <icon wx:if="{{ errors.password }}" type="warn" size="23" color="#E64340"></icon>
             </view>
           </view>
+          <view class="weui-cells weui-image">
+            <identity></identity>
+          </view>
         </view>
         <view wx:if="{{ errors.password }}" class="weui-cells__tips error-message">{{ errors.password[0] }}</view>
 
@@ -96,8 +99,9 @@
 <script>
   import wepy from 'wepy'
   import api from '@/utils/api'
+  import identity from '@/components/identity'
 
-  export default class Login extends wepy.page {
+  export default class Register extends wepy.page {
     config = {
       navigationBarTitleText: '注册'
     }
@@ -116,6 +120,9 @@
       errors: {},
       // 短信验证码 key 及过期时间
       verificationCode: {}
+    }
+    components = {
+      identity: identity
     }
     // 重置注册流程，初始化 data 数据
     resetRegister() {

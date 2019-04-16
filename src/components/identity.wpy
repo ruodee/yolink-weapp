@@ -5,12 +5,12 @@
   <view class="merch_img">
     <view class="indentityCard">
       <view class="identityCard_front" bindtap="frontimage">
-        <image src="../../pages/images/merch_att_add/tubiao.png" class="images"></image>
+        <image src="/images/camera.png" class="images"></image>
         <view class="imgs">身份证正面</view>
         <image src="{{FilePaths}}" mode="aspecFill" class="paths" />
       </view>
       <view class="identityCard_recite" bindtap="reciteimage">
-        <image src="../../pages/images/merch_att_add/tubiao.png" class="images"></image>
+        <image src="/images/camera.png" class="images"></image>
         <view class="imgs">身份证背面</view>
         <image src="{{recitePaths}}" mode="aspecFill" class="paths" />
       </view>
@@ -20,7 +20,7 @@
 </template>
 <script>
   import wepy from 'wepy'
-  export default class User extends wepy.page {
+  export default class Identity extends wepy.component {
     data = {
       tempFilePaths: '',
       hidden: true, // true

@@ -39,7 +39,6 @@ import api from '@/utils/api'
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/users/identity',
       'pages/index',
       'pages/topics/index',
       'pages/topics/show',
