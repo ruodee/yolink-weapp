@@ -68,12 +68,9 @@
               <icon wx:if="{{ errors.password }}" type="warn" size="23" color="#E64340"></icon>
             </view>
           </view>
-          <view class="weui-cells weui-image">
-            <identity></identity>
-          </view>
+          <identity></identity>
         </view>
         <view wx:if="{{ errors.password }}" class="weui-cells__tips error-message">{{ errors.password[0] }}</view>
-
         <view class="weui-btn-area">
           <button class="weui-btn" type="primary" formType="submit">注册</button>
         </view>

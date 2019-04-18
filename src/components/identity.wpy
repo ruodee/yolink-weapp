@@ -1,79 +1,79 @@
-<style>
+<style lang="less">
+.avatar_wrap {
+  padding: 0 auto;
+  text-align: center;
+  height: 64rpx;
+  image {
+    position: absolute;
+    top: 50%;
+    max-width: 50rpx;
+    max-height: 50rpx;
+  }
+}
 </style>
 <template>
-  <loading hidden="{{hidden}}">
-    上传中...
-  </loading>
-  <view class="weui-article">
-    <view class="weui-article-h3">保障权益，身份认证：</view>
-      <view class="weui-article__section" @tap="frontimage">
-        <view class="weui-article__title">身份证正面</view>
-        <view class="weui-article__p" style="height: 180rpx">
-          <image wx:if="{{ !FilePath }}" src="/images/camera.png" class="weui-article__img" style="max-width: 50rpx; max-height: 50px;"></image>
-          <image wx:if="{{ FilePath }}" src="{{FilePaths}}" mode="aspecFit" class="weui-article__img" style="height: 180rpx" />
+   <view class="page">
+        <view class="page__hd">
+            <view class="page__title">身份认证</view>
+            <view class="page__desc">上传身份证</view>
         </view>
-      </view>
-      <view class="weui-article__section" @tap="reciteimage">
-        <view class="weui-article__title">身份证背面</view>
-        <view class="weui-article__p">
-          <image src="/images/camera.png" class="weui-article__img" style="max-width: 50rpx"></image>
-          <image src="{{recitePaths}}" mode="aspecFit" class="weui-article__img" style="height: 180rpx" />
+        <view class="page__bd">
+            <view class="weui-cells">
+                <view class="weui-cell">
+                    <view class="weui-cell__bd">
+                        <view class="weui-uploader">
+                            <view class="weui-uploader__hd">
+                                <view class="weui-uploader__title">拍照上传</view>
+                                <view class="weui-uploader__info">{{files.length}}/2</view>
+                            </view>
+                            <view class="weui-uploader__bd">
+                                <view class="weui-uploader__files" id="uploaderFiles">
+                                    <block  wx:for="{{files}}" wx:key="*this">
+                                        <view class="weui-uploader__file" bindtap="previewImage" id="{{item}}">
+                                            <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"/>
+                                        </view>
+                                    </block>
+                                    <view class="weui-uploader__file">
+                                        <image class="weui-uploader__img" src="../images/camera.png" mode="aspectFill"/>
+                                    </view>
+                                    <view class="weui-uploader__file">
+                                        <image class="weui-uploader__img" src="../images/camera.png" mode="aspectFill"/>
+                                    </view>
+                                    <view class="weui-uploader__file">
+                                        <image class="weui-uploader__img" src="../images/camera.png" mode="aspectFill"/>
+                                    </view>
+                                </view>
+                                <view class="weui-uploader__input-box">
+                                    <view class="weui-uploader__input" bindtap="chooseImage"/>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
         </view>
-      </view>
-  </view>
+    </view>
 </template>
 <script>
   import wepy from 'wepy'
   export default class Identity extends wepy.component {
     data = {
-      tempFilePaths: '',
-      hidden: true, // true
-      buthidden: false, // false
-      sourceType: ['album', 'camera']
-    }
-    onLoad() {
-      try {
-        var res = wepy.getSystemInfoSync()
-        var platform = res.platform
-        if (platform === 'ios') {
-          wepy.msg('警告', 'IOS系统暂不支持拍照，请从相册选择照片')
-          this.setData({
-            sourceType: ['album']
-          })
-        }
-        console.log(platform)
-      } catch (e) { }
-    }
+      files: []
+    };
     methods = {
-      frontimage() {
-        var _this = this
-        var Type = _this.data.sourceType
-        wepy.chooseImage({
-          count: 1, // 默认9
+      async chooseImage (e) {
+        let res = await wepy.chooseImage({
           sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-          sourceType: Type, // 可以指定来源是相册还是相机，默认二者都有
-          success: function (res) {
-            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-            _this.setData({
-              FilePaths: res.tempFilePaths
-            })
-          }
-        })
+          sourceType: ['album', 'camera'] // 可以指定来源是相册还是相机，默认二者都有
+        });
+      this.files = this.files.concat(res.tempFilePaths);
+      this.$apply();
       },
-      reciteimage() {
-        var _this = this
-        var Type = _this.data.sourceType
-        wepy.chooseImage({
-          count: 1, // 默认9
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-          sourceType: Type, // 可以指定来源是相册还是相机，默认二者都有
-          success: function (res) {
-            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-            _this.setData({
-              recitePaths: res.tempFilePaths
-            })
-          }
-        })
+      previewImage (e) {
+        wepy.previewImage({
+          current: e.currentTarget.id, // 当前显示图片的http链接
+          urls: this.data.files // 需要预览的图片http链接列表
+        });
       }
     }
   }
