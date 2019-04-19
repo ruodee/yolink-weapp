@@ -56,7 +56,6 @@
           </view>
         </view>
         <view wx:if="{{ errors.name }}" class="weui-cells__tips error-message">{{errors.name[0]}}</view>
-
         <!-- 密码 -->
         <view class="weui-cells__title {{ errors.password ? 'weui-cell_warn' : ''}}">密码</view>
         <view class="weui-cells weui-cells_after-title">
@@ -68,8 +67,20 @@
               <icon wx:if="{{ errors.password }}" type="warn" size="23" color="#E64340"></icon>
             </view>
           </view>
-          <identity></identity>
         </view>
+        <view class="weui-cells__title">我的技能标签</view>
+            <view class="weui-cells weui-cells_after-title">
+              <checkbox-group @change="checkboxChange" name="checkboxItems">
+                  <label class="weui-cell weui-check__label" wx:for="{{checkboxItems}}" wx:key="value">
+                      <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+                      <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                          <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+                          <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
+                      </view>
+                      <view class="weui-cell__bd">{{item.name}}</view>
+                  </label>
+              </checkbox-group>
+            </view>
         <view wx:if="{{ errors.password }}" class="weui-cells__tips error-message">{{ errors.password[0] }}</view>
         <view class="weui-btn-area">
           <button class="weui-btn" type="primary" formType="submit">注册</button>
@@ -88,7 +99,6 @@
           </view>
         </view>
       </modal>
-
     </view>
   </view>
 </template>
@@ -96,8 +106,6 @@
 <script>
   import wepy from 'wepy'
   import api from '@/utils/api'
-  import identity from '@/components/identity'
-
   export default class Register extends wepy.page {
     config = {
       navigationBarTitleText: '注册'
@@ -116,10 +124,23 @@
       // 表单错误
       errors: {},
       // 短信验证码 key 及过期时间
-      verificationCode: {}
-    }
-    components = {
-      identity: identity
+      verificationCode: {},
+      checkboxItems: [
+        {name: '土建', value: '0', checked: true},
+        {name: '木工', value: '1', checked: false},
+        {name: '清洁', value: '2', checked: false},
+        {name: '水电维修', value: '3', checked: false},
+        {name: '服务', value: '4', checked: false},
+        {name: '保卫', value: '5', checked: false},
+        {name: '基础管理', value: '6', checked: false},
+        {name: '杂活', value: '7', checked: false},
+        {name: '电话客服', value: '8', checked: false},
+        {name: '销售', value: '9', checked: false},
+        {name: 'IT', value: '10', checked: false},
+        {name: '会计', value: '11', checked: false},
+        {name: '公关', value: '12', checked: false},
+        {name: '电子电器', value: '13', checked: false}
+      ]
     }
     // 重置注册流程，初始化 data 数据
     resetRegister() {
@@ -154,6 +175,7 @@
 
       try {
         let formData = e.detail.value
+        console.log(e.detail.value)
         formData.verification_key = this.verificationCode.key
 
         let loginData = await wepy.login()
@@ -332,6 +354,22 @@
             content: '服务器错误，请联系管理员'
           })
         }
+      },
+      checkboxChange (e) {
+        console.log('checkbox发生change事件，携带value值为：', e.detail.value);
+        var checkboxItems = this.checkboxItems, values = e.detail.value;
+        for (var i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
+            checkboxItems[i].checked = false;
+
+            for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
+                if (checkboxItems[i].value === values[j]) {
+                    checkboxItems[i].checked = true;
+                    break;
+                }
+            }
+        }
+
+        this.checkboxItems = checkboxItems;
       }
     }
   }

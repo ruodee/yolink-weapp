@@ -51,7 +51,8 @@ export default class extends wepy.app {
       'pages/replies/index',
       'pages/replies/userIndex',
       'pages/replies/create',
-      'pages/notifications/index'
+      'pages/notifications/index',
+      'pages/auth/identity'
     ],
     window: {
       backgroundTextStyle: 'light',
