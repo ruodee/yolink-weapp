@@ -1,0 +1,127 @@
+<style>
+    .wrap-skills {
+        margin-top: 5px;
+    }
+</style>
+
+<template>
+    <view class="page">
+        <view class="page__bd">
+            <view class="weui-cell wrap-skills">
+                <form method="submmit">
+                    <view class="weui-toptips weui-toptips_warn" wx:if="{{ errorMessage }}">{{ errorMessage }}</view>
+                    <view class="weui-cells__title">修改技能</view>
+                    <view class="weui-cells weui-cells_after-title">
+                        <checkbox-group @change="checkboxChange">
+                            <label class="weui-cell weui-check__label" wx:for="{{checkboxItems}}" wx:key="value">
+                                <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+                                <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+                                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
+                                </view>
+                                <view class="weui-cell__bd">{{item.name}}</view>
+                            </label>
+                        </checkbox-group>
+                        <input name="skills_label" value="{{skills_label}}" hidden="true" maxlength="-1"/>
+                    </view>
+                </form>
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+import api from '@/utils/api'
+export default class Skills extends wepy.page {
+    config = {
+        navigationBarTitleText: '修改个人技能'
+    }
+    data = {
+        user: null,
+        errors: null,
+        checkboxItems: [
+            {name: '土建', value: '0', checked: true},
+            {name: '木工', value: '1', checked: false},
+            {name: '清洁', value: '2', checked: false},
+            {name: '水电维修', value: '3', checked: false},
+            {name: '服务', value: '4', checked: false},
+            {name: '保卫', value: '5', checked: false},
+            {name: '基础管理', value: '6', checked: false},
+            {name: '杂活', value: '7', checked: false},
+            {name: '电话客服', value: '8', checked: false},
+            {name: '销售', value: '9', checked: false},
+            {name: 'IT', value: '10', checked: false},
+            {name: '会计', value: '11', checked: false},
+            {name: '公关', value: '12', checked: false},
+            {name: '电子电器', value: '13', checked: false}
+        ]
+    }
+    async onShow() {
+        // 获取当前用户信息
+        this.user = await this.$parent.getCurrentUser()
+        console.log(this.user)
+        if(this.user.skills_label) {
+            this.checkboxItems = JSON.parse(this.user.skills_label)
+        }
+        this.$apply()
+    }
+    // 表单提交
+    async submit (e) {
+        this.errors = null
+        try {
+            let formData = e.detail.value
+
+            // 当avatarId被设置过之后则增加到 avatar_image_id 中
+            if (this.avatarId !== 0) {
+            formData.avatar_image_id = this.avatarId
+            }
+
+            let editResponse = await api.authRequest({
+            url: 'user',
+            method: 'PUT',
+            data: formData
+            })
+
+            // 设置报错信息
+            if (editResponse.statusCode === 422) {
+            this.errors = editResponse.data.errors
+            this.$apply()
+            }
+
+            // 请求成功，缓存用户数据
+            if (editResponse.statusCode === 200) {
+            this.user = editResponse.data
+            wepy.setStorageSync('user', editResponse.data)
+            this.$apply()
+
+            wepy.showToast({
+                title: '修改成功',
+                icon: 'success',
+                duration: 2000
+            })
+            }
+        }   catch (err) {
+            console.log(err)
+            wepy.showModal({
+            title: '提示',
+            content: '服务器错误，请联系管理员'
+            })
+            }
+    }
+    checkboxChange (e) {
+        let checkboxItems = this.checkboxItems
+        let values = e.detail.value
+        for (var i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
+        checkboxItems[i].checked = false
+
+            for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
+                if (checkboxItems[i].value === values[j]) {
+                checkboxItems[i].checked = true
+                break
+                }
+            }
+        }
+    }
+}
+</script>
+

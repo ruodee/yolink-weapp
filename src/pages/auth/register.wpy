@@ -70,7 +70,7 @@
         </view>
         <view class="weui-cells__title">我的技能标签</view>
             <view class="weui-cells weui-cells_after-title">
-              <checkbox-group @change="checkboxChange" name="checkboxItems">
+              <checkbox-group @change="checkboxChange">
                   <label class="weui-cell weui-check__label" wx:for="{{checkboxItems}}" wx:key="value">
                       <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
                       <view class="weui-cell__hd weui-check__hd_in-checkbox">
@@ -80,6 +80,7 @@
                       <view class="weui-cell__bd">{{item.name}}</view>
                   </label>
               </checkbox-group>
+              <input name="skills_label" value="{{skills_label}}" hidden="true" maxlength="-1"/>
             </view>
         <view wx:if="{{ errors.password }}" class="weui-cells__tips error-message">{{ errors.password[0] }}</view>
         <view class="weui-btn-area">
@@ -149,6 +150,27 @@
       this.captcha = {}
       this.verificationCode = {}
       this.errors = {}
+      this.checkboxItems = [
+        {name: '土建', value: '0', checked: true},
+        {name: '木工', value: '1', checked: false},
+        {name: '清洁', value: '2', checked: false},
+        {name: '水电维修', value: '3', checked: false},
+        {name: '服务', value: '4', checked: false},
+        {name: '保卫', value: '5', checked: false},
+        {name: '基础管理', value: '6', checked: false},
+        {name: '杂活', value: '7', checked: false},
+        {name: '电话客服', value: '8', checked: false},
+        {name: '销售', value: '9', checked: false},
+        {name: 'IT', value: '10', checked: false},
+        {name: '会计', value: '11', checked: false},
+        {name: '公关', value: '12', checked: false},
+        {name: '电子电器', value: '13', checked: false}
+      ]
+    }
+    computed = {
+      skills_label () {
+        return JSON.stringify(this.checkboxItems)
+      }
     }
     // 表单提交
     async submit (e) {
@@ -175,13 +197,11 @@
 
       try {
         let formData = e.detail.value
-        console.log(e.detail.value)
         formData.verification_key = this.verificationCode.key
 
         let loginData = await wepy.login()
         // 参数中增加code，用于获取 openid 绑定当前用户
         formData.code = loginData.code
-
         let registerResponse = await api.request({
           url: 'weapp/users',
           method: 'POST',
@@ -264,7 +284,6 @@
             imageContent: captchaResponse.data.captcha_image_content,
             expiredAt: Date.parse(captchaResponse.data.expired_at)
           }
-
           // 关闭modal
           this.captchaModalHidden = false
           this.$apply()
@@ -356,20 +375,20 @@
         }
       },
       checkboxChange (e) {
-        console.log('checkbox发生change事件，携带value值为：', e.detail.value);
-        var checkboxItems = this.checkboxItems, values = e.detail.value;
+        let checkboxItems = this.checkboxItems
+        let values = e.detail.value
         for (var i = 0, lenI = checkboxItems.length; i < lenI; ++i) {
-            checkboxItems[i].checked = false;
+          checkboxItems[i].checked = false
 
-            for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
-                if (checkboxItems[i].value === values[j]) {
-                    checkboxItems[i].checked = true;
-                    break;
-                }
+          for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
+            if (checkboxItems[i].value === values[j]) {
+              checkboxItems[i].checked = true
+              break
             }
+          }
         }
-
-        this.checkboxItems = checkboxItems;
+        this.checkboxItems = checkboxItems
+        this.$apply()
       }
     }
   }
