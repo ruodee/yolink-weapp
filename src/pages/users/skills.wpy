@@ -1,31 +1,34 @@
 <style>
     .wrap-skills {
         margin-top: 5px;
+        text-align: center;
     }
 </style>
 
 <template>
     <view class="page">
         <view class="page__bd">
-            <view class="weui-cell wrap-skills">
-                <form method="submmit">
-                    <view class="weui-toptips weui-toptips_warn" wx:if="{{ errorMessage }}">{{ errorMessage }}</view>
-                    <view class="weui-cells__title">修改技能</view>
-                    <view class="weui-cells weui-cells_after-title">
-                        <checkbox-group @change="checkboxChange">
-                            <label class="weui-cell weui-check__label" wx:for="{{checkboxItems}}" wx:key="value">
-                                <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
-                                <view class="weui-cell__hd weui-check__hd_in-checkbox">
-                                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
-                                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
-                                </view>
-                                <view class="weui-cell__bd">{{item.name}}</view>
-                            </label>
-                        </checkbox-group>
-                        <input name="skills_label" value="{{skills_label}}" hidden="true" maxlength="-1"/>
-                    </view>
-                </form>
-            </view>
+            <view class="weui-cell wrap-skills">修改技能</view>
+            <form bindsubmit="submit">
+                <view class="weui-toptips weui-toptips_warn" wx:if="{{ errorMessage }}">{{ errorMessage }}</view>
+                <view class="weui-cells__title">修改技能</view>
+                <view class="weui-cells weui-cells_after-title">
+                <checkbox-group @change="checkboxChange">
+                    <label class="weui-cell weui-check__label" wx:for="{{checkboxItems}}" wx:key="value">
+                        <checkbox class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+                        <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!item.checked}}"></icon>
+                            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{item.checked}}"></icon>
+                        </view>
+                        <view class="weui-cell__bd">{{item.name}}</view>
+                    </label>
+                </checkbox-group>
+                <input name="skills_label" value="{{skills_label}}" hidden="true" maxlength="-1"/>
+                </view>
+                <view class="weui-btn-area">
+                    <button class="weui-btn" type="primary" formType="submit">修改</button>
+                </view>
+            </form>
         </view>
     </view>
 </template>
@@ -61,7 +64,8 @@ export default class Skills extends wepy.page {
         this.user = await this.$parent.getCurrentUser()
         console.log(this.user)
         if(this.user.skills_label) {
-            this.checkboxItems = JSON.parse(this.user.skills_label)
+            this.checkboxItems = this.user.skills_label
+            console.log(this.checkboxItems)
         }
         this.$apply()
     }
@@ -70,12 +74,7 @@ export default class Skills extends wepy.page {
         this.errors = null
         try {
             let formData = e.detail.value
-
-            // 当avatarId被设置过之后则增加到 avatar_image_id 中
-            if (this.avatarId !== 0) {
-            formData.avatar_image_id = this.avatarId
-            }
-
+            formData.skills_label = this.checkboxItems
             let editResponse = await api.authRequest({
             url: 'user',
             method: 'PUT',
