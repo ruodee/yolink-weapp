@@ -151,7 +151,7 @@
       this.verificationCode = {}
       this.errors = {}
       this.checkboxItems = [
-        {name: '土建', value: '0', checked: true},
+        {name: '土建', value: '0', checked: false},
         {name: '木工', value: '1', checked: false},
         {name: '清洁', value: '2', checked: false},
         {name: '水电维修', value: '3', checked: false},
