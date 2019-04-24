@@ -55,18 +55,23 @@
   }
   image{
     margin: 4px 0;
+    width: 100%;
   }
 </style>
 <template>
   <view class="page">
-    <view class="weui-article__p">
-        <image class="weui-article__img" src="../images/yolink-bg.png" mode="aspectFit" style="height: 180px" />
+    <view class="page__bd page__bd__spacing">
+      <view class="weui-flex">
+        <view class="weui-flex__item">
+          <image class="title_img" src="../images/yolink-bg.png" />
+        </view>
+      </view>
     </view>
     <view class="page__bd">
         <view class="weui-grids">
             <block wx:for="{{grids}}" wx:for-item="category" wx:key="*this">
                 <navigator url="" class="weui-grid" hover-class="weui-grid_active">
-                    <image class="weui-grid__icon" src="../images/icon_tabbar.png" />
+                    <image class="weui-grid__icon" src="../images/icon_tabbar.png" mode="scaleToFill" />
                     <view class="weui-grid__label">{{ category }}</view>
                 </navigator>
             </block>

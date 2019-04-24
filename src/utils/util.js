@@ -6,6 +6,7 @@ const diffForHumans = (date, format = 'YYYYMMDD H:mm:ss') => {
   return moment(date, format).fromNow()
 }
 
+const host = __BASE_URL__
 export default {
   diffForHumans
 }
